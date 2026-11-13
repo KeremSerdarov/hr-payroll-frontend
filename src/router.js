@@ -8,6 +8,7 @@ import EmployeeLeaveRequestsView from './views/EmployeeLeaveRequestsView.vue'
 import AdminAttendancesView from './views/AdminAttendancesView.vue'
 import EmployeeAttendancesView from './views/EmployeeAttendancesView.vue'
 import AdminDepartmentsView from './views/AdminDepartmentsView.vue'
+import AdminEmployeesView from './views/AdminEmployeesView.vue'
 
 const roleHome = (role) => {
   if (role === 'admin') return '/admin'
@@ -33,6 +34,7 @@ const router = createRouter({
     { path: '/admin/leave-requests', component: AdminLeaveRequestsView, meta: { requiresAuth: true, role: 'admin' } },
     { path: '/admin/attendances', component: AdminAttendancesView, meta: { requiresAuth: true, role: 'admin' } },
     { path: '/admin/departments', component: AdminDepartmentsView, meta: { requiresAuth: true, role: 'admin' } },
+    { path: '/admin/employees', component: AdminEmployeesView, meta: { requiresAuth: true, role: 'admin' } },
     { path: '/admin/:pathMatch(.*)*', component: DashboardView, meta: { requiresAuth: true, role: 'admin', title: 'Admin paneli' } },
     { path: '/employee', component: DashboardView, meta: { requiresAuth: true, role: 'employee', title: 'Ishgar paneli' } },
     { path: '/employee/payrolls', component: EmployeePayrollsView, meta: { requiresAuth: true, role: 'employee' } },
