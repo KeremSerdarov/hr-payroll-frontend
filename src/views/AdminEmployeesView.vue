@@ -117,64 +117,66 @@ onMounted(loadData)
 </script>
 
 <template>
-  <main class="min-h-screen bg-slate-50">
-    <header class="border-b border-slate-200 bg-white">
+  <main class="app-background min-h-screen">
+    <div class="ambient-glow" aria-hidden="true"></div>
+    <header class="glass-nav">
       <div class="mx-auto flex max-w-6xl items-center gap-5 px-6 py-4">
-        <RouterLink to="/admin" class="text-lg font-bold text-slate-900">Admin paneli</RouterLink>
-        <span class="text-sm font-medium text-indigo-600">Employees</span>
+        <RouterLink to="/admin" class="text-lg font-bold nav-brand">Admin paneli</RouterLink>
+        <span class="text-sm font-medium text-theme-accent">Employees</span>
+      <button type="button" class="theme-toggle" data-theme-toggle aria-label="Toggle color theme" title="Toggle color theme" onclick="window.toggleTheme()"></button>
       </div>
     </header>
 
     <section class="mx-auto max-w-6xl space-y-6 px-6 py-10">
-      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h1 class="text-2xl font-bold text-slate-900">{{ editingEmployee ? 'Redaktirle' : 'Täze işgär' }}</h1>
+      <div class="glass-card p-6">
+        <h1 class="text-2xl font-bold text-theme-primary">{{ editingEmployee ? 'Redaktirle' : 'Täze işgär' }}</h1>
         <form class="mt-5 grid gap-4 sm:grid-cols-2" @submit.prevent="saveEmployee">
-          <label class="grid gap-1.5 text-sm font-medium text-slate-700">Ady
-            <input v-model="name" type="text" required class="rounded-lg border border-slate-300 px-3 py-2.5" />
+          <label class="grid gap-1.5 text-sm font-medium text-theme-secondary">Ady
+            <input v-model="name" type="text" required class="glass-input" />
           </label>
-          <label class="grid gap-1.5 text-sm font-medium text-slate-700">Email
-            <input v-model="email" type="email" required class="rounded-lg border border-slate-300 px-3 py-2.5" />
+          <label class="grid gap-1.5 text-sm font-medium text-theme-secondary">Email
+            <input v-model="email" type="email" required class="glass-input" />
           </label>
-          <label class="grid gap-1.5 text-sm font-medium text-slate-700">{{ editingEmployee ? 'Täze parol (islege görä)' : 'Parol' }}
-            <input v-model="password" type="password" :required="!editingEmployee" minlength="8" autocomplete="new-password" class="rounded-lg border border-slate-300 px-3 py-2.5" />
+          <label class="grid gap-1.5 text-sm font-medium text-theme-secondary">{{ editingEmployee ? 'Täze parol (islege görä)' : 'Parol' }}
+            <input v-model="password" type="password" :required="!editingEmployee" minlength="8" autocomplete="new-password" class="glass-input" />
           </label>
-          <label class="grid gap-1.5 text-sm font-medium text-slate-700">Bölüm
-            <select v-model="departmentId" required class="rounded-lg border border-slate-300 bg-white px-3 py-2.5">
+          <label class="grid gap-1.5 text-sm font-medium text-theme-secondary">Bölüm
+            <select v-model="departmentId" required class="glass-input">
               <option value="" disabled>Bölümi saýlaň</option>
               <option v-for="department in departments" :key="department.id" :value="department.id">{{ department.name }}</option>
             </select>
           </label>
-          <label class="grid gap-1.5 text-sm font-medium text-slate-700">Wezipesi
-            <input v-model="position" type="text" required class="rounded-lg border border-slate-300 px-3 py-2.5" />
+          <label class="grid gap-1.5 text-sm font-medium text-theme-secondary">Wezipesi
+            <input v-model="position" type="text" required class="glass-input" />
           </label>
-          <label class="grid gap-1.5 text-sm font-medium text-slate-700">Esasy aýlyk
-            <input v-model.number="baseSalary" type="number" min="0" step="0.01" required class="rounded-lg border border-slate-300 px-3 py-2.5" />
+          <label class="grid gap-1.5 text-sm font-medium text-theme-secondary">Esasy aýlyk
+            <input v-model.number="baseSalary" type="number" min="0" step="0.01" required class="glass-input" />
           </label>
-          <label class="grid gap-1.5 text-sm font-medium text-slate-700">Işe başlan senesi
-            <input v-model="hiredAt" type="date" required class="rounded-lg border border-slate-300 px-3 py-2.5" />
+          <label class="grid gap-1.5 text-sm font-medium text-theme-secondary">Işe başlan senesi
+            <input v-model="hiredAt" type="date" required class="glass-input" />
           </label>
           <div class="flex items-end gap-3">
-            <button type="submit" :disabled="saving || departments.length === 0" class="rounded-lg bg-indigo-600 px-5 py-2.5 font-semibold text-white hover:bg-indigo-700 disabled:opacity-60">
+            <button type="submit" :disabled="saving || departments.length === 0" class="btn-primary">
               {{ saving ? 'Saklanyar...' : editingEmployee ? 'Üýtgetmäni sakla' : 'Işgär döret' }}
             </button>
-            <button v-if="editingEmployee" type="button" @click="resetForm" class="rounded-lg border border-slate-300 px-5 py-2.5 font-medium text-slate-700 hover:bg-slate-50">Ýatyr</button>
+            <button v-if="editingEmployee" type="button" @click="resetForm" class="btn-ghost">Ýatyr</button>
           </div>
         </form>
       </div>
 
-      <p v-if="error" role="alert" class="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{{ error }}</p>
+      <p v-if="error" role="alert" class="glass-error">{{ error }}</p>
 
-      <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-        <div v-if="loading" class="p-8 text-center text-sm text-slate-500">Ýüklenýär...</div>
-        <div v-else-if="employees.length === 0" class="p-8 text-center text-sm text-slate-500">Işgär ýok.</div>
+      <div class="glass-table">
+        <div v-if="loading" class="p-8 text-center text-sm text-theme-muted">Ýüklenýär...</div>
+        <div v-else-if="employees.length === 0" class="p-8 text-center text-sm text-theme-muted">Işgär ýok.</div>
         <div v-else class="overflow-x-auto">
           <table class="w-full min-w-[1000px] text-left text-sm">
-            <thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+            <thead class="table-head text-xs uppercase tracking-wide text-theme-muted">
               <tr><th class="px-4 py-3">Ady</th><th class="px-4 py-3">Email</th><th class="px-4 py-3">Bölüm</th><th class="px-4 py-3">Wezipesi</th><th class="px-4 py-3">Esasy aýlyk</th><th class="px-4 py-3">Işe başlady</th><th class="px-4 py-3"></th></tr>
             </thead>
-            <tbody class="divide-y divide-slate-100">
-              <tr v-for="employee in employees" :key="employee.id" class="text-slate-700">
-                <td class="px-4 py-4 font-medium text-slate-900">{{ employee.user?.name || employee.name || '—' }}</td>
+            <tbody class="table-body">
+              <tr v-for="employee in employees" :key="employee.id" class="text-theme-secondary">
+                <td class="px-4 py-4 font-medium text-theme-primary">{{ employee.user?.name || employee.name || '—' }}</td>
                 <td class="px-4 py-4">{{ employee.user?.email || employee.email || '—' }}</td>
                 <td class="px-4 py-4">{{ employee.department?.name || '—' }}</td>
                 <td class="px-4 py-4">{{ employee.position }}</td>
@@ -182,8 +184,8 @@ onMounted(loadData)
                 <td class="px-4 py-4">{{ employee.hired_at }}</td>
                 <td class="px-4 py-4">
                   <div class="flex gap-2">
-                    <button type="button" @click="startEdit(employee)" class="rounded-md border border-slate-300 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50">Redaktirle</button>
-                    <button type="button" :disabled="deletingId === employee.id" @click="deleteEmployee(employee)" class="rounded-md bg-red-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-red-700 disabled:opacity-60">
+                    <button type="button" @click="startEdit(employee)" class="rounded-md border border-slate-300 px-3 py-1.5 text-xs font-semibold text-theme-secondary hover:bg-white/10">Redaktirle</button>
+                    <button type="button" :disabled="deletingId === employee.id" @click="deleteEmployee(employee)" class="btn-danger btn-small">
                       {{ deletingId === employee.id ? 'Pozulýar...' : 'Poz' }}
                     </button>
                   </div>

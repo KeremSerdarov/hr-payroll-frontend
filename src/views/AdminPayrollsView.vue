@@ -62,42 +62,44 @@ onMounted(loadPayrolls)
 </script>
 
 <template>
-  <main class="min-h-screen bg-slate-50">
-    <header class="border-b border-slate-200 bg-white">
+  <main class="app-background min-h-screen">
+    <div class="ambient-glow" aria-hidden="true"></div>
+    <header class="glass-nav">
       <div class="mx-auto flex max-w-7xl items-center gap-5 px-6 py-4">
-        <RouterLink to="/admin" class="text-lg font-bold text-slate-900">Admin paneli</RouterLink>
-        <span class="text-sm font-medium text-indigo-600">Payrolls</span>
+        <RouterLink to="/admin" class="text-lg font-bold nav-brand">Admin paneli</RouterLink>
+        <span class="text-sm font-medium text-theme-accent">Payrolls</span>
+      <button type="button" class="theme-toggle" data-theme-toggle aria-label="Toggle color theme" title="Toggle color theme" onclick="window.toggleTheme()"></button>
       </div>
     </header>
 
     <section class="mx-auto max-w-7xl space-y-6 px-6 py-10">
-      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h1 class="text-2xl font-bold text-slate-900">Payrolls</h1>
+      <div class="glass-card p-6">
+        <h1 class="text-2xl font-bold text-theme-primary">Payrolls</h1>
         <form class="mt-5 flex flex-wrap items-end gap-4" @submit.prevent="generatePayrolls">
-          <label class="grid gap-1.5 text-sm font-medium text-slate-700">
+          <label class="grid gap-1.5 text-sm font-medium text-theme-secondary">
             Month
-            <select v-model="month" class="rounded-lg border border-slate-300 bg-white px-3 py-2.5">
+            <select v-model="month" class="glass-input">
               <option v-for="number in 12" :key="number" :value="number">{{ number }}</option>
             </select>
           </label>
-          <label class="grid gap-1.5 text-sm font-medium text-slate-700">
+          <label class="grid gap-1.5 text-sm font-medium text-theme-secondary">
             Year
-            <input v-model="year" type="number" min="2000" max="2200" required class="w-32 rounded-lg border border-slate-300 px-3 py-2.5" />
+            <input v-model="year" type="number" min="2000" max="2200" required class="w-32 glass-input" />
           </label>
-          <button type="submit" :disabled="submitting" class="rounded-lg bg-indigo-600 px-5 py-2.5 font-semibold text-white hover:bg-indigo-700 disabled:opacity-60">
+          <button type="submit" :disabled="submitting" class="btn-primary">
             {{ submitting ? 'Generating...' : 'Generate' }}
           </button>
         </form>
       </div>
 
-      <p v-if="error" role="alert" class="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{{ error }}</p>
+      <p v-if="error" role="alert" class="glass-error">{{ error }}</p>
 
-      <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-        <div v-if="loading" class="p-8 text-center text-sm text-slate-500">Loading payrolls...</div>
-        <div v-else-if="payrolls.length === 0" class="p-8 text-center text-sm text-slate-500">No payroll records yet.</div>
+      <div class="glass-table">
+        <div v-if="loading" class="p-8 text-center text-sm text-theme-muted">Loading payrolls...</div>
+        <div v-else-if="payrolls.length === 0" class="p-8 text-center text-sm text-theme-muted">No payroll records yet.</div>
         <div v-else class="overflow-x-auto">
           <table class="w-full min-w-[1000px] text-left text-sm">
-            <thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+            <thead class="table-head text-xs uppercase tracking-wide text-theme-muted">
               <tr>
                 <th class="px-4 py-3">Employee</th><th class="px-4 py-3">Month / Year</th>
                 <th class="px-4 py-3">Base salary</th><th class="px-4 py-3">Bonus</th>
@@ -105,17 +107,17 @@ onMounted(loadPayrolls)
                 <th class="px-4 py-3">Net salary</th><th class="px-4 py-3">Status</th><th class="px-4 py-3"></th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-slate-100">
-              <tr v-for="payroll in payrolls" :key="payroll.id" class="text-slate-700">
-                <td class="px-4 py-3 font-medium text-slate-900">{{ payroll.employee?.name || '—' }}</td>
+            <tbody class="table-body">
+              <tr v-for="payroll in payrolls" :key="payroll.id" class="text-theme-secondary">
+                <td class="px-4 py-3 font-medium text-theme-primary">{{ payroll.employee?.name || '—' }}</td>
                 <td class="px-4 py-3">{{ payroll.month }} / {{ payroll.year }}</td>
                 <td class="px-4 py-3">{{ payroll.base_salary }}</td><td class="px-4 py-3">{{ payroll.bonus }}</td>
                 <td class="px-4 py-3">{{ payroll.deduction }}</td><td class="px-4 py-3">{{ payroll.tax }}</td>
                 <td class="px-4 py-3 font-medium">{{ payroll.net_salary }}</td>
-                <td class="px-4 py-3"><span class="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium">{{ payroll.status }}</span></td>
+                <td class="px-4 py-3"><span :class="`badge badge-${payroll.status}`">{{ payroll.status }}</span></td>
                 <td class="px-4 py-3">
                   <button v-if="payroll.status === 'draft'" type="button" :disabled="payingId === payroll.id" @click="payPayroll(payroll.id)"
-                    class="rounded-md bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-60">
+                    class="btn-success btn-small">
                     {{ payingId === payroll.id ? 'Paying...' : 'Töle' }}
                   </button>
                 </td>

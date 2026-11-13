@@ -56,55 +56,57 @@ onMounted(loadRequests)
 </script>
 
 <template>
-  <main class="min-h-screen bg-slate-50">
-    <header class="border-b border-slate-200 bg-white">
+  <main class="app-background min-h-screen">
+    <div class="ambient-glow" aria-hidden="true"></div>
+    <header class="glass-nav">
       <div class="mx-auto flex max-w-5xl items-center gap-5 px-6 py-4">
-        <RouterLink to="/employee" class="text-lg font-bold text-slate-900">Ishgar paneli</RouterLink>
-        <span class="text-sm font-medium text-indigo-600">Rugsat soraglary</span>
+        <RouterLink to="/employee" class="text-lg font-bold nav-brand">Ishgar paneli</RouterLink>
+        <span class="text-sm font-medium text-theme-accent">Rugsat soraglary</span>
+      <button type="button" class="theme-toggle" data-theme-toggle aria-label="Toggle color theme" title="Toggle color theme" onclick="window.toggleTheme()"></button>
       </div>
     </header>
 
     <section class="mx-auto max-w-5xl space-y-6 px-6 py-10">
-      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h1 class="text-2xl font-bold text-slate-900">Rugsat soragy</h1>
+      <div class="glass-card p-6">
+        <h1 class="text-2xl font-bold text-theme-primary">Rugsat soragy</h1>
         <form class="mt-5 grid gap-4 sm:grid-cols-2" @submit.prevent="submitRequest">
-          <label class="grid gap-1.5 text-sm font-medium text-slate-700">
+          <label class="grid gap-1.5 text-sm font-medium text-theme-secondary">
             Başlangyç senesi
-            <input v-model="startDate" type="date" required class="rounded-lg border border-slate-300 px-3 py-2.5" />
+            <input v-model="startDate" type="date" required class="glass-input" />
           </label>
-          <label class="grid gap-1.5 text-sm font-medium text-slate-700">
+          <label class="grid gap-1.5 text-sm font-medium text-theme-secondary">
             Gutarýan senesi
-            <input v-model="endDate" type="date" required class="rounded-lg border border-slate-300 px-3 py-2.5" />
+            <input v-model="endDate" type="date" required class="glass-input" />
           </label>
-          <label class="grid gap-1.5 text-sm font-medium text-slate-700 sm:col-span-2">
+          <label class="grid gap-1.5 text-sm font-medium text-theme-secondary sm:col-span-2">
             Sebäp
-            <textarea v-model="reason" required maxlength="5000" rows="4" class="rounded-lg border border-slate-300 px-3 py-2.5" />
+            <textarea v-model="reason" required maxlength="5000" rows="4" class="glass-input" />
           </label>
           <div class="sm:col-span-2">
-            <button type="submit" :disabled="submitting" class="rounded-lg bg-indigo-600 px-5 py-2.5 font-semibold text-white hover:bg-indigo-700 disabled:opacity-60">
+            <button type="submit" :disabled="submitting" class="btn-primary">
               {{ submitting ? 'Iberilýär...' : 'Sorag iber' }}
             </button>
           </div>
         </form>
       </div>
 
-      <p v-if="error" role="alert" class="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{{ error }}</p>
+      <p v-if="error" role="alert" class="glass-error">{{ error }}</p>
 
-      <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-        <h2 class="px-5 pt-5 text-lg font-semibold text-slate-900">Meniň soraglarym</h2>
-        <div v-if="loading" class="p-8 text-center text-sm text-slate-500">Ýüklenýär...</div>
-        <div v-else-if="requests.length === 0" class="p-8 text-center text-sm text-slate-500">Entäk rugsat soragy ýok.</div>
+      <section class="glass-table">
+        <h2 class="px-5 pt-5 text-lg font-semibold text-theme-primary">Meniň soraglarym</h2>
+        <div v-if="loading" class="p-8 text-center text-sm text-theme-muted">Ýüklenýär...</div>
+        <div v-else-if="requests.length === 0" class="p-8 text-center text-sm text-theme-muted">Entäk rugsat soragy ýok.</div>
         <div v-else class="mt-4 overflow-x-auto">
           <table class="w-full min-w-[750px] text-left text-sm">
-            <thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+            <thead class="table-head text-xs uppercase tracking-wide text-theme-muted">
               <tr><th class="px-5 py-3">Başlangyç</th><th class="px-5 py-3">Gutarýan</th><th class="px-5 py-3">Sebäp</th><th class="px-5 py-3">Ýagdaýy</th><th class="px-5 py-3">Admin düşündirişi</th></tr>
             </thead>
-            <tbody class="divide-y divide-slate-100">
-              <tr v-for="item in requests" :key="item.id" class="text-slate-700">
+            <tbody class="table-body">
+              <tr v-for="item in requests" :key="item.id" class="text-theme-secondary">
                 <td class="px-5 py-4">{{ item.start_date }}</td>
                 <td class="px-5 py-4">{{ item.end_date }}</td>
                 <td class="max-w-xs whitespace-pre-wrap px-5 py-4">{{ item.reason }}</td>
-                <td class="px-5 py-4"><span class="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium">{{ item.status }}</span></td>
+                <td class="px-5 py-4"><span :class="`badge badge-${item.status}`">{{ item.status }}</span></td>
                 <td class="px-5 py-4">{{ item.admin_comment || '—' }}</td>
               </tr>
             </tbody>

@@ -28,26 +28,28 @@ async function logout() {
 </script>
 
 <template>
-  <main class="min-h-screen bg-slate-50">
-    <header class="border-b border-slate-200 bg-white">
+  <main class="app-background min-h-screen">
+    <div class="ambient-glow" aria-hidden="true"></div>
+    <header class="glass-nav">
       <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <h1 class="text-lg font-bold text-slate-900">HR Payroll</h1>
+        <h1 class="text-lg font-bold text-theme-primary">HR Payroll</h1>
         <div class="flex items-center gap-4">
-          <RouterLink :to="payrollPath" class="text-sm font-medium text-indigo-600 hover:text-indigo-700">Payrolls</RouterLink>
-          <RouterLink :to="leaveRequestsPath" class="text-sm font-medium text-indigo-600 hover:text-indigo-700">Leave requests</RouterLink>
-          <RouterLink :to="attendancePath" class="text-sm font-medium text-indigo-600 hover:text-indigo-700">Attendances</RouterLink>
-          <RouterLink v-if="route.meta.role === 'admin'" :to="departmentsPath" class="text-sm font-medium text-indigo-600 hover:text-indigo-700">Departments</RouterLink>
-          <RouterLink v-if="route.meta.role === 'admin'" :to="employeesPath" class="text-sm font-medium text-indigo-600 hover:text-indigo-700">Employees</RouterLink>
+          <RouterLink :to="payrollPath" class="text-sm font-medium text-theme-accent nav-link">Payrolls</RouterLink>
+          <RouterLink :to="leaveRequestsPath" class="text-sm font-medium text-theme-accent nav-link">Leave requests</RouterLink>
+          <RouterLink :to="attendancePath" class="text-sm font-medium text-theme-accent nav-link">Attendances</RouterLink>
+          <RouterLink v-if="route.meta.role === 'admin'" :to="departmentsPath" class="text-sm font-medium text-theme-accent nav-link">Departments</RouterLink>
+          <RouterLink v-if="route.meta.role === 'admin'" :to="employeesPath" class="text-sm font-medium text-theme-accent nav-link">Employees</RouterLink>
           <button type="button" :disabled="loading" @click="logout"
-            class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:opacity-60">
+            class="btn-ghost disabled:opacity-60">
             {{ loading ? 'Logging out...' : 'Logout' }}
           </button>
         </div>
+      <button type="button" class="theme-toggle" data-theme-toggle aria-label="Toggle color theme" title="Toggle color theme" onclick="window.toggleTheme()"></button>
       </div>
     </header>
     <section class="mx-auto max-w-6xl px-6 py-12">
-      <div class="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
-        <h2 class="text-2xl font-bold text-slate-900">{{ route.meta.title }}</h2>
+      <div class="glass-card p-8">
+        <h2 class="text-2xl font-bold text-theme-primary">{{ route.meta.title }}</h2>
       </div>
     </section>
   </main>

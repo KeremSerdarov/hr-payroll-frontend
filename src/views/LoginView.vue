@@ -49,30 +49,32 @@ async function login() {
 </script>
 
 <template>
-  <main class="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-12">
-    <section class="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+  <main class="relative flex min-h-screen items-center justify-center app-background px-4 py-12">
+    <div class="ambient-glow" aria-hidden="true"></div>
+    <button type="button" class="theme-toggle absolute right-5 top-5" data-theme-toggle aria-label="Toggle color theme" title="Toggle color theme" onclick="window.toggleTheme()"></button>
+    <section class="w-full max-w-md glass-card p-8">
       <div class="mb-8">
-        <p class="text-sm font-semibold uppercase tracking-widest text-indigo-600">HR Payroll</p>
-        <h1 class="mt-3 text-2xl font-bold text-slate-900">Ulgama giris</h1>
-        <p class="mt-2 text-sm text-slate-500">Dowam etmek uchun maglumatlary girizin.</p>
+        <p class="text-sm font-semibold uppercase tracking-widest text-theme-accent">HR Payroll</p>
+        <h1 class="mt-3 text-2xl font-bold text-theme-primary">Ulgama giris</h1>
+        <p class="mt-2 text-sm text-theme-muted">Dowam etmek uchun maglumatlary girizin.</p>
       </div>
 
       <form class="space-y-5" @submit.prevent="login">
         <div>
-          <label for="email" class="mb-1.5 block text-sm font-medium text-slate-700">Email</label>
+          <label for="email" class="mb-1.5 block text-sm font-medium text-theme-secondary">Email</label>
           <input id="email" v-model="email" type="email" autocomplete="email" required
-            class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100" />
+            class="w-full glass-input" />
         </div>
         <div>
-          <label for="password" class="mb-1.5 block text-sm font-medium text-slate-700">Parol</label>
+          <label for="password" class="mb-1.5 block text-sm font-medium text-theme-secondary">Parol</label>
           <input id="password" v-model="password" type="password" autocomplete="current-password" required
-            class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100" />
+            class="w-full glass-input" />
         </div>
 
-        <p v-if="error" role="alert" class="rounded-lg bg-red-50 px-3.5 py-3 text-sm text-red-700">{{ error }}</p>
+        <p v-if="error" role="alert" class="glass-error">{{ error }}</p>
 
         <button type="submit" :disabled="loading"
-          class="w-full rounded-lg bg-indigo-600 px-4 py-2.5 font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60">
+          class="btn-primary w-full">
           {{ loading ? 'Girilyar...' : 'Girmek' }}
         </button>
       </form>
