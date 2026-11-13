@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from './views/LoginView.vue'
 import DashboardView from './views/DashboardView.vue'
+import AdminPayrollsView from './views/AdminPayrollsView.vue'
+import EmployeePayrollsView from './views/EmployeePayrollsView.vue'
 
 const roleHome = (role) => {
   if (role === 'admin') return '/admin'
@@ -21,7 +23,12 @@ const router = createRouter({
   routes: [
     { path: '/', redirect: () => roleHome(storedRole()) },
     { path: '/login', component: LoginView, meta: { guestOnly: true } },
+    { path: '/admin', component: DashboardView, meta: { requiresAuth: true, role: 'admin', title: 'Admin paneli' } },
+    { path: '/admin/payrolls', component: AdminPayrollsView, meta: { requiresAuth: true, role: 'admin' } },
     { path: '/admin/:pathMatch(.*)*', component: DashboardView, meta: { requiresAuth: true, role: 'admin', title: 'Admin paneli' } },
+    { path: '/employee', component: DashboardView, meta: { requiresAuth: true, role: 'employee', title: 'Ishgar paneli' } },
+    { path: '/employee/payrolls', component: EmployeePayrollsView, meta: { requiresAuth: true, role: 'employee' } },
+    { path: '/employee/payrolls/:id', component: EmployeePayrollsView, meta: { requiresAuth: true, role: 'employee' } },
     { path: '/employee/:pathMatch(.*)*', component: DashboardView, meta: { requiresAuth: true, role: 'employee', title: 'Ishgar paneli' } },
     { path: '/:pathMatch(.*)*', redirect: '/' },
   ],

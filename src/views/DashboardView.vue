@@ -1,18 +1,19 @@
 <script setup>
 import { ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
 import api from '../api'
 
 const route = useRoute()
 const router = useRouter()
 const loading = ref(false)
+const payrollPath = route.meta.role === 'admin' ? '/admin/payrolls' : '/employee/payrolls'
 
 async function logout() {
   loading.value = true
   try {
     await api('/logout', { method: 'POST' })
   } catch {
-    // Always clear the local session, even when the API is unavailable.
+    // Clear the local session even if the API is unavailable.
   } finally {
     localStorage.removeItem('token')
     localStorage.removeItem('user')
@@ -27,10 +28,13 @@ async function logout() {
     <header class="border-b border-slate-200 bg-white">
       <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <h1 class="text-lg font-bold text-slate-900">HR Payroll</h1>
-        <button type="button" :disabled="loading" @click="logout"
-          class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:opacity-60">
-          {{ loading ? 'Çykylýar...' : 'Logout' }}
-        </button>
+        <div class="flex items-center gap-4">
+          <RouterLink :to="payrollPath" class="text-sm font-medium text-indigo-600 hover:text-indigo-700">Payrolls</RouterLink>
+          <button type="button" :disabled="loading" @click="logout"
+            class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:opacity-60">
+            {{ loading ? 'Logging out...' : 'Logout' }}
+          </button>
+        </div>
       </div>
     </header>
     <section class="mx-auto max-w-6xl px-6 py-12">
