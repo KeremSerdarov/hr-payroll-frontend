@@ -8,6 +8,7 @@ const router = useRouter()
 const loading = ref(false)
 const payrollPath = route.meta.role === 'admin' ? '/admin/payrolls' : '/employee/payrolls'
 const leaveRequestsPath = route.meta.role === 'admin' ? '/admin/leave-requests' : '/employee/leave-requests'
+const attendancePath = route.meta.role === 'admin' ? '/admin/attendances' : '/employee/attendances'
 
 async function logout() {
   loading.value = true
@@ -32,6 +33,7 @@ async function logout() {
         <div class="flex items-center gap-4">
           <RouterLink :to="payrollPath" class="text-sm font-medium text-indigo-600 hover:text-indigo-700">Payrolls</RouterLink>
           <RouterLink :to="leaveRequestsPath" class="text-sm font-medium text-indigo-600 hover:text-indigo-700">Leave requests</RouterLink>
+          <RouterLink :to="attendancePath" class="text-sm font-medium text-indigo-600 hover:text-indigo-700">Attendances</RouterLink>
           <button type="button" :disabled="loading" @click="logout"
             class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:opacity-60">
             {{ loading ? 'Logging out...' : 'Logout' }}
